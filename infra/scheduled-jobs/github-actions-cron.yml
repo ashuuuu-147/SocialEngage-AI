@@ -1,0 +1,24 @@
+name: Cloud Monitoring Trigger
+
+on:
+  schedule:
+    - cron: "*/30 * * * *"
+  workflow_dispatch:
+
+jobs:
+  trigger-monitor:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger SocialEngage AI Cloud Monitor
+        env:
+          API_BASE_URL: ${{ secrets.API_BASE_URL }}
+          INTERNAL_JOB_SECRET: ${{ secrets.INTERNAL_JOB_SECRET }}
+        run: |
+          if [ -z "$API_BASE_URL" ] || [ -z "$INTERNAL_JOB_SECRET" ]; then
+            echo "Secrets API_BASE_URL and INTERNAL_JOB_SECRET are required."
+            exit 1
+          fi
+          curl -fsS -X POST "${API_BASE_URL%/}/api/v1/internal/jobs/monitor" \
+            -H "Authorization: Bearer ${INTERNAL_JOB_SECRET}" \
+            -H "Content-Type: application/json" \
+            -d '{}'

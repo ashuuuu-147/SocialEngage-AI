@@ -1,0 +1,7 @@
+name = "socialengage-cron-scheduler"
+main = "cloudflare-worker.js"
+compatibility_date = "2025-01-01"
+
+[triggers]
+# Every 30 minutes for monitoring + daily at 13:00 UTC (18:30 IST) for digest
+crons = ["*/30 * * * *", "0 13 * * *"]
